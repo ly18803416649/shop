@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="shopping">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <script src="angular.js"></script>
+    <title>Title</title>
+    <style>
+        .header{
+            width:100%;
+            background:#000;
+            margin-bottom:20px;
+        }
+        .navbar{
+            margin:0;
+        }
+        .dropdown-menu{
+            width:500px;
+        }
+        .dropdown-menu.show{
+            display:block !important;
+        }
+        .trtd{
+            line-height:55px;
+
+        }
+        .ad{
+            line-height:55px !important;
+            margin:0;
+            padding:0;
+        }
+        .dropdown{
+            position:relative;
+        }
+        .dropdown .box{
+            display:inline-block;
+            width:20px !important;
+            height:20px !important;
+            position:absolute;
+            top:5px;
+            left:70px;
+            border-radius:50%;
+            color:#fff;
+            font-size:14px;
+            line-height:20px;
+            text-align:center;
+
+        }
+        .ad1{
+            width:50px;
+            height:40px;
+            position:relative;
+
+        }
+    
+        @font-face{
+            font-family:'icon-font';
+            src:url('iconfont.woff');
+        }
+        .icon-font{
+            font-family:'icon-font' !important;
+        }
+        .icon-jiantoushang:before { content: "\e65d"; }
+        .icon-xiajiantou:before { content: "\e89f"; }
+    </style>
+</head>
+<body ng-controller="mainCtrl">
+<div class="header">
+    <div class="container">
+        <nav class="navbar navbar-inverse" role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Brand</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+
+                    <ul class="nav navbar-nav navbar-right">
+
+                        <li class="dropdown" ng-init="aa=false">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-click="aa=!aa">购物车<span class="box">{{bag.length}}</span></span><span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu" ng-class="{show:aa}">
+                                <li ng-repeat="bags in bag track by $index">
+                                    <table class="table">
+                                        <tr class="trtd">
+                                            <td class="ad"><img src="{{bags.img}}" alt="" style="max-width:40px;"></td>
+                                            <td class="ad">{{bags.name}}</td>
+                                            <td class="ad ad1">{{bags.num}}<div class="tdtop"></div><div class="tdbottom"></div></td>
+                                            <td class="ad">{{bags.price}}</td>
+                                            <td class="ad"><button type="button" class="btn  btn-danger" ng-click="delete($index)">删除</button></td>
+                                        </tr>
+                                    </table>
+                                </li>
+
+                                <!--<li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>-->
+                                <li class="divider"></li>
+                                <!--<li><a href="#">Separated link</a></li>-->
+                                <li ng-show="bag.length==0">亲，你的购物车是空的哦！</li>
+                                <li ng-show="bag.length!=0">您的商品有{{bag.length}}件，总价为{{event()}}</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class=" col-md-4" ng-repeat="good in goods">
+            <div class="thumbnail">
+                <img ng-src="{{good.img}}" alt="...">
+                <div class="caption">
+                    <h3>{{good.name}}</h3>
+                    <p>{{good.price}}</p>
+                    <p><a href="#" class="btn btn-primary" role="button" ng-click="add($index)">加入购物车</a> </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+<script>
+var shop=angular.module('shopping',[]);
+    shop.controller('mainCtrl',['$scope',function($scope){
+        $scope.goods=[
+            {name:'小米',
+                img:'1.jpg',
+                price:2100
+            },
+            {
+                name:'华为',
+                img:'1.jpg',
+                price:2300
+            },{
+                name:'苹果',
+                img:'1.jpg',
+                price:'5000'
+            }
+        ]
+        $scope.bag=[];
+        $scope.add=function(index){
+            var item=$scope.goods[index];
+            item.num=1;
+            $scope.bag.push(item);
+//            $scope.bag.push($scope.goods[index]);
+            console.log($scope.bag)
+        }
+        $scope.delete=function(index){
+            $scope.bag.splice(index,1);
+        }
+        $scope.event=function(){
+            var t=0;
+            $scope.bag.forEach(function(v){
+                t+=v.price*1;
+            })
+            return t;
+        }
+
+    }])
+
+
+</script>
+</html>
